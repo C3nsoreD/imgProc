@@ -5,6 +5,7 @@ import (
 	"image"
 	_ "image/jpeg" // used explicitly for initialization side-effects image.Decode will read jpg file formats.
 	"os"
+	"image/color"
 )
 
 // load an image from disk
@@ -32,4 +33,20 @@ func RGBAToGrey(img image.Image) *image.Gray {
 		}
 	}
 	return gray
+}
+
+// give graysacele color a threshold 
+func blackOrWhite(g color.Gray, thr uint8) color.Gray {
+	if g.Y < thr {
+		return color.Gray{0} // black
+	}
+	return color.Gray{255} // white
+}
+
+func newWhite(bounds image.Rectangle) *image.Gray {
+	var white = image.NewGray(bounds)
+	for i := range white.Pix {
+		white.Pix[i] = 255 // make every pixel white
+	}
+	return white
 }
